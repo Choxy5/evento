@@ -1,7 +1,7 @@
 import Loading from '@/app/events/[city]/loading';
 import EventsList from '@/components/events-list';
 import H1 from '@/components/h1';
-import { EventoEvent } from '@/lib/types';
+import { EventoEvent } from '@prisma/client';
 import { capitalize, sleep } from '@/lib/utils';
 import { Metadata } from 'next';
 import { Suspense } from 'react';

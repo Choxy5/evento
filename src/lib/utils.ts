@@ -1,4 +1,4 @@
-import { EventoEvent } from '@/lib/types';
+import { EventoEvent } from '@prisma/client';
 import clsx, { ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -30,6 +30,6 @@ export async function getEvent(slug: string) {
     `https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`
   );
 
-  const event = await response.json();
+  const event: EventoEvent = await response.json();
   return event;
 }
