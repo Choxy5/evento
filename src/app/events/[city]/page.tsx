@@ -1,8 +1,7 @@
 import Loading from '@/app/events/[city]/loading';
 import EventsList from '@/components/events-list';
 import H1 from '@/components/h1';
-import { EventoEvent } from '@prisma/client';
-import { capitalize, sleep } from '@/lib/utils';
+import { capitalize } from '@/lib/utils';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
@@ -10,6 +9,10 @@ type Props = {
   params: {
     city: string;
   };
+};
+
+type EventsPageProps = Props & {
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export function generateMetadata({ params }: Props): Metadata {
@@ -20,15 +23,12 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-export default async function EventsPage({ params }: Props) {
+export default async function EventsPage({
+  params,
+  searchParams,
+}: EventsPageProps) {
   const city = params.city;
-
-  await sleep(2000);
-  const response = await fetch(
-    `https://bytegrad.com/course-assets/projects/evento/api/events?city=${city}`
-  );
-
-  const events: EventoEvent[] = await response.json();
+  const page = searchParams.page || 1;
 
   return (
     <main className="flex flex-col items-center py-24 px-[20px] min-h-[110vh]">
@@ -37,8 +37,8 @@ export default async function EventsPage({ params }: Props) {
         {city !== 'all' && `Events in ${capitalize(city)}`}
       </H1>
 
-      <Suspense fallback={<Loading />}>
-        <EventsList city={city} />
+      <Suspense key={city + page} fallback={<Loading />}>
+        <EventsList city={city} page={+page} />
       </Suspense>
     </main>
   );
